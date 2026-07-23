@@ -1,4 +1,4 @@
-# Super-Prompt v2.1: Precision Prompt Forging
+# Super-Prompt v2.2: Precision Prompt Engineering — AI That Can't Misunderstand You
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Standard: Agent Skills](https://img.shields.io/badge/Standard-Agent%20Skills-6e3ef7.svg)](https://agentskills.io)
