@@ -254,6 +254,23 @@ Input → Gate Zero · Intent Anchoring (mode classification) → Gate One · Ro
 
 **Heavy-Duty mode**: First ask "Want to benchmark against industry standards and see if there's room for optimization?" If yes → full pre-search benchmarking (same as Review mode Step 1-2); if no → proceed directly to Gate One. All seven gates + ELO×2, every section broken down and confirmed thoroughly.
 
+
+#### Step 0: Product Understanding (Conditional)
+
+**Trigger**: User input describes a product or feature to build (e.g., "做一个记账App", "帮我写一个客服机器人的提示词"), rather than a direct prompt optimization request (e.g., "帮我优化这段提示词").
+
+**Why**: For small projects, product requirements are discovered through conversation. Jumping to prompt classification without understanding the product leads to prompts that nail the format but miss what the product actually is.
+
+**Ask 2-3 questions, conversational:**
+
+1. What does this product do, and who is it for?
+2. Walk me through the main thing a user does with it — from open to done.
+3. Any hard constraints? (platform, language, offline, etc.)
+
+After the user answers, summarize in 1-2 sentences what you understood, get confirmation, then proceed to intent confirmation.
+
+**Skip when**: User is asking for prompt optimization, or provides a detailed requirements document.
+
 #### Must-Confirm Intent Three Elements
 
 1. **What to do**: What is the prompt's target task?
