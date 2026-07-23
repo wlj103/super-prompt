@@ -264,8 +264,8 @@ Input → Gate Zero · Intent Anchoring (mode classification) → Gate One · Ro
 **Ask 3 questions, conversational:**
 
 1. What problem does this solve?
-2. What are the core functional requirements?
-3. How do you know it's done right? (acceptance criteria)
+2. What features do you want? Any special ideas or requirements?
+3. Any preferences on design / UI / user flow?
 
 After the user answers, summarize in 1-2 sentences what you understood, get confirmation, then proceed to intent confirmation.
 
