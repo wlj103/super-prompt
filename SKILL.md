@@ -1,565 +1,785 @@
 ---
 name: "super-prompt"
-description: "提示词工程工具：反歧义拦截×联网预搜索×分层引导×ELO排名，从一句话到生产级提示词。适用于Claude/GPT/Agent系统提示词、SOP、Agent指令。触发词：写提示词、精铸提示词、优化prompt、写系统提示词。"
+description: "Prompt Engineering Tool: Anti-Ambiguity Interception × Web Pre-Search × Layered Guidance × ELO Ranking. Forge production-grade prompts for Claude, GPT, Gemini, and AI agents. Use when writing prompts, system prompts, agent instructions, or SOPs. Trigger: 'write a prompt', 'optimize my prompt', 'forge a prompt'."
 license: MIT
 ---
 
-# Super-Prompt
+# Super-Prompt v1.0
 
-**让 AI 收到的每个指令都精准无歧义——而不是"差不多就行"。**
+**Make every instruction received by AI precise and unambiguous — not "good enough."**
 
 ## The Problem
 
-提示词工程有一个根本性缺陷：**模型会学会绕过提示词。** 你说"强制验证"，它输出四个字："强制验证通过"。你说"详细说明"，它写 3 行废话也算详细。你说"用 JSON 格式"，它自由发挥字段名。
+Prompt engineering has a fundamental flaw: **models learn to circumvent prompts.** You say "mandatory verification," and it outputs four characters: "Verification passed." You say "detailed explanation," and 3 lines of fluff counts as detailed. You say "use JSON format," and it freely invents field names.
 
-这不是模型不够聪明——是模型太聪明了。它学会了用最小的认知成本满足字面要求，同时绕过真正的意图。
+This isn't because models aren't smart enough — it's because models are too smart. They've learned to satisfy literal requirements with minimal cognitive cost while bypassing the real intent.
 
-Super-Prompt 不是模板，不是填空表，是**一整套提示词纪律体系**。通过七道闸门引导式交互 + 联网搜索预加载 + 反歧义校验，帮用户从一句话或一份产品文档，精铸出 **AI 无法误解的生产级提示词**。
+Super-Prompt is not a template, not a fill-in-the-blank form — it's a **complete prompt engineering discipline system.** Through seven guided gates + web search preloading + anti-ambiguity verification + ELO multi-candidate ranking, it helps users forge **production-grade prompts that AI cannot misinterpret** — starting from a single sentence or a product document.
 
 ## What Makes This Different
 
-| 其他提示词工具 | Super-Prompt |
+| Other Prompt Tools | Super-Prompt |
 |-------------|-------------|
-| "写一个提示词" | 七道闸门必须通过，不能跳步 |
-| 相信用户表达清楚了 | **反歧义条款**：18 条清单逐条扫描，禁止空口通过 |
-| 用户自己判断质量 | 闸门五：对抗测试，模拟 AI 可能误解的 3 种路径 |
-| "看起来不错" | 证据驱动：每个设计决策有搜索证据或行业准则支撑 |
-| 一次性提问 | 分层引导：每轮 ≤4 问，从最简单的必选问题开始逐层深入 |
-| 让用户自己想答案 | 联网搜索预加载：每问必搜，把搜索结果转化为选项注入问题 |
+| "Write a prompt" | Seven gates must be passed, no skipping |
+| Trusts that users expressed clearly | **Anti-ambiguity clauses**: 18-item checklist scanned item by item, no empty assertions |
+| Users judge quality themselves | Gate Five: Multi-candidate ELO ranking, pairwise PK quantified comparison |
+| "Looks good" | Evidence-driven: every design decision backed by search evidence or industry standards |
+| One-shot questioning | Layered guidance: ≤4 questions per round, starting from simplest mandatory questions, deepening layer by layer |
+| Makes users think of answers themselves | Web search preloading: search before every question, convert results into options injected into questions |
+| Single candidate, roll the dice | **Multi-candidate ELO ranking**: generate 3-5 candidates, quantify PK, data speaks |
 
-Super-Prompt 是唯一一个**系统性地分类模型如何误解指令**、并为每种误解路径创建**锁定方法**的提示词工程体系。
+Super-Prompt is the only prompt engineering system that **systematically classifies how models misinterpret instructions** and creates **locking methods** for each misinterpretation path. Built-in ELO ranking system (integrated from gpt-prompt-engineer, MIT license), using chess ranking algorithms to quantitatively compare candidate prompts.
 
 ### How Models Circumvent Prompts
 
-| 你说 | 它理解成 | 为什么危险 |
+| You Say | It Understands As | Why It's Dangerous |
 |------|---------|-----------|
-| "简洁地描述" | 3 行废话也算简洁 | 模型选最小认知成本路径 |
-| "用 JSON 格式" | 字段名？嵌套？可选？不管 | 模型自由发挥，下游解析失败 |
-| "处理异常" | 只写 try-catch 不写处理什么 | 表单验证，实际无效 |
-| "专业语气" | PhD 级还是入门级？猜一个 | 受众错位，信息无法传达 |
-| "适当处理" | 什么叫适当？随缘 | 不可判定，不可验证 |
-| "高质量" | 自评通过 | 不可判定，等于没说 |
-| "包括相关功能" | 什么是相关？自由发挥 | 范围蔓延，交付失控 |
-| "尽量简洁但完整" | 矛盾指令，随机取舍 | 要么不全，要么不简 |
+| "Describe concisely" | 3 lines of fluff counts as concise | Model chooses the path of least cognitive cost |
+| "Use JSON format" | Field names? Nesting? Optional? Whatever | Model freely improvises, downstream parsing fails |
+| "Handle exceptions" | Only writes try-catch, not what to handle | Form validation, actually ineffective |
+| "Professional tone" | PhD-level or entry-level? Guess one | Audience mismatch, message fails to convey |
+| "Handle appropriately" | What's appropriate? Whatever | Non-determinable, non-verifiable |
+| "High quality" | Self-assessed pass | Non-determinable, equals saying nothing |
+| "Include relevant features" | What's relevant? Free rein | Scope creep, delivery out of control |
+| "Be concise but complete" | Contradictory instruction, random trade-offs | Either incomplete or not concise |
 
-## 与 super-spec 的关系
+## Relationship with super-spec
 
-- **super-spec** = 工程纪律（能不能不跳步、能不能出证据、能不能跨文档自洽）
-- **super-prompt** = 提示词纪律（表达精不精准、结构清不清晰、歧义有没有锁死）
+- **super-spec** = engineering discipline (can steps be skipped? can evidence be produced? is cross-document self-consistency maintained?)
+- **super-prompt** = prompt discipline (is expression precise? is structure clear? is ambiguity locked down?)
 
 ```
-用户需求 → [super-prompt] → 高质量提示词文档 → [super-spec] → 五份工程文档 → 交付
+User need → [super-prompt] → high-quality prompt document → [super-spec] → five engineering documents → delivery
 ```
 
-spec 管纪律，prompt 管表达。双剑合璧。
+spec governs discipline, prompt governs expression. Two swords combined.
 
 ---
 
-## 速查卡（agent 执行前必读）
+## Quick Reference Card (must-read before agent execution)
 
-### 三种模式
+### Three Modes
 
-闸门零判断意图后自动分模，用户确认：
+Gate Zero automatically classifies mode after determining intent, user confirms:
 
-| 模式 | 用户画像 | 输入 | 流程 | 交互方式 |
+| Mode | User Profile | Input | Process | Interaction Style |
 |------|---------|------|------|---------|
-| 标准 | 非程序员/无文档 | 一句话/模糊需求 | 全搜→逐闸门引导 | 逐闸门选择题 |
-| 审查 | 资深/有完整方案 | PRD/商业文档/原型 | 自动全量预搜→批量优化点→选深挖→闸门三四五六 | 批量抛点，用户选 |
-| 重型 | 团队/多Agent | 复杂工程文档 | 先问"要不要联网比对"→要则预搜对标→全七道+对抗×2 | 每段掰开揉碎 |
+| Standard | Non-programmer / no docs | One sentence / vague need | Full search → gate-by-gate guidance | Gate-by-gate multiple choice |
+| Review | Senior / has complete plan | PRD / business doc / prototype | Auto full pre-search → batch optimization points → user selects deep-dive → Gates 3–6 | Batch present points, user selects |
+| Heavy-Duty | Team / multi-agent | Complex engineering docs | First ask "compare against benchmarks?" → if yes, pre-search benchmarking → all seven gates + ELO×2 | Break down every section thoroughly |
 
-### 搜索规则（所有模式通用）
+### Fast Track
 
-**全闸门必搜。** 搜索是核心价值，不是负担。标准模式用户无文档，更需要搜索给选项。
+User comes in with clear requirements (role + format + boundaries all specified), skip Gate Zero/One, start from Gate Two structure skeleton. The normal experience is "oh, we're already started without filling in forms."
 
-搜索降级：搜索不可用 → 正常提问，标注"未搜索，仅供参考"。
+### Output Complexity Tiers
 
-### 不可跳过的检查点
+Input mode determines **how to interact**, output complexity determines **how deep to deliver**. The two are orthogonal.
 
-1. 闸门三：每段必须过反歧义检查
-2. 闸门四：必须实际扫描文本，禁止空口填"是"
-3. 闸门六：收尾 8 项逐条核对
+During interaction, the Agent automatically determines the project tier based on collected information and outputs it for user confirmation at Gate Zero:
+
+| Tier | Criteria | Output Requirements | Gate Differences |
+|------|---------|---------|---------|
+| Light | Test / experiment / one-shot prompt, or user explicitly says "just keep it simple" / "try it out first" | Basic prompt document | Gate Five skips ELO multi-candidate (single candidate OK); Gate Four only checks first 9 of 18 items; Gate Six wrap-up 4 items |
+| Medium (default) | Regular production prompt, clear scenario but not system-level | Standard prompt document | Full seven-gate standard process |
+| Heavy | Agent system prompt, multi-agent collaboration, production-grade SOP | Complete prompt document + test cases + regression verification | Full seven gates + ELO×2 + all 18 items + 8-item full wrap-up checklist |
+
+**Auto-determination rules** (Agent outputs determination after collecting the following information at Gate Zero):
+
+Gate Zero must ask one follow-up about functional scope — "What core features does this project roughly have?" — and auto-classify based on the complexity of the answer, not just keyword matching.
+
+- User mentions "Agent" / "system prompt" / "multi-agent" / "SOP" / "production environment" → Heavy
+- User mentions "test" / "try out" / "temporary" / "see how it works first" → Light
+- Single function, clear boundaries (e.g., "a calendar component" / "a translation API") → Light
+- Multiple functions but flat (e.g., "2D casual game" / "content management backend") → Medium
+- Complex functions, multi-layered nesting (e.g., "3D open world" / "multi-agent collaboration platform") → Heavy
+- Everything else → Medium (default)
+
+**Examples**:
+| User Says | After Follow-up | Determination |
+|--------|-------|------|
+| "Build an app" | "A single calendar function" | Light |
+| "Build an app" | "2D casual game" | Medium |
+| "Build an app" | "3D open world, with character system, physics engine" | Heavy |
+| "3D game" | "Small map, single-player" | Heavy |
+| "3D game" | "Large map + online multiplayer + state sync" | Heavy (deeper, need additional network/sync/latency constraints) |
+
+**Heavy tier additional probing**: After determining "Heavy," Gate Zero asks one more follow-up:
+- Does it need networking / multiplayer?
+- What's the data scale? (local / hundreds / tens of thousands of users)
+- Is there real-time sync needed?
+
+Based on the answers, decide whether to enable ELO×2 at Gate Five and add boundary condition generation at Gate Four.
+
+The determination result is output at Gate Zero when confirming intent: "Based on your description, this project is classified as [Light / Medium / Heavy] tier, with the following output standards…"
+
+### Search Rules (universal across all modes)
+
+**All gates must search.** Search is core value, not a burden. Standard mode users lack documentation and need search even more to provide options.
+
+Search degradation: search unavailable → ask questions normally, mark "not searched, for reference only."
+
+### Non-Skippable Checkpoints (by output complexity)
+
+**Light tier**:
+1. Gate Three: every section must pass anti-ambiguity check
+2. Gate Four: first 9 anti-ambiguity items scanned item by item, no empty assertions
+3. Gate Six: 4-item wrap-up checklist verified item by item
+
+**Medium tier**:
+1. Gate Three: every section must pass anti-ambiguity check
+2. Gate Four: all 18 items verified, must actually scan text, no empty "yes" assertions
+3. Gate Five: ELO ranking must run all candidate pairs, no skipping pairs
+4. Gate Six: 8-item wrap-up checklist verified item by item
+
+**Heavy tier**:
+1. All Medium tier items
+2. Gate Five: ELO×2, bidirectional scoring + additional test cases
+3. Gate Four: additional boundary condition generation (networking / multiplayer / scale / real-time sync)
 
 ---
 
-## 六条设计原则
+## Seven Design Principles
 
-| # | 原则 | 反面（模型怎么偷换成"差不多"） |
+| # | Principle | Opposite (How Models Substitute "Good Enough") |
 |---|------|-------------------------------|
-| 1 | 锁死语义不锁死创意 | "简洁"不量化→3 行还是 30 行都行 |
-| 2 | 结构验证不信任表达 | 说"包含错误处理"→只写 try-catch 不写处理什么 |
-| 3 | 分层引导不一次性 | 一次性甩 20 个问题→用户崩溃/乱填 |
-| 4 | 证据驱动不感觉驱动 | "我觉得这样写好"→无搜索证据支撑 |
-| 5 | 探测驱动不硬编码 | 假设用户技术栈→实际不匹配 |
-| 6 | 歧义验收不信任验收 | "看起来没问题"→18 条清单没过 |
+| 1 | Lock semantics, not creativity | "Concise" not quantified → 3 lines or 30 lines, both pass |
+| 2 | Verify structure, don't trust expression | "Include error handling" → only writes try-catch, not what to handle |
+| 3 | Layer guidance, not one-shot | Dump 20 questions at once → user crashes / fills in randomly |
+| 4 | Evidence-driven, not feeling-driven | "I think this is good" → no search evidence backing |
+| 5 | Probe-driven, not hardcoded | Assume user's tech stack → doesn't match reality |
+| 6 | Ambiguity acceptance, don't trust acceptance | "Looks fine" → 18-item checklist not passed |
+| 7 | Output on demand, no excess, no shortfall | Calendar component doesn't run all 18 items; 3D open world doesn't skip ELO×2. Safety margin only increases, never decreases |
 
 ---
 
-## 反歧义体系
+## Anti-Ambiguity System
 
-### 四型反歧义条款
+### Four-Type Anti-Ambiguity Clauses
 
-**A. 语义模糊型（偷懒重灾区）**
+**A. Semantic Vagueness (Laziness Hotspot)**
 
-| 你说 | 模型怎么"差不多" | 锁法 |
+| You Say | How Model "Good-Enoughs" It | Locking Method |
 |------|-----------------|------|
-| "简洁地描述" | 写 3 行废话也算简洁 | 写明行数上限："≤5 行" |
-| "详细说明" | 10 行还是 100 行都算详细 | 写明行数下限或段落结构 |
-| "专业语气" | PhD 级还是入门级？猜一个 | 定义受众+术语级别 |
-| "适当处理" | 什么叫适当？随缘 | 给具体值或条件分支 |
-| "高质量" | 不可判定，自评通过 | 给可验证的判定标准 |
+| "Describe concisely" | 3 lines of fluff counts as concise | Specify line limit: "≤5 lines" |
+| "Explain in detail" | 10 lines or 100 lines both count as detailed | Specify minimum line count or paragraph structure |
+| "Professional tone" | PhD-level or entry-level? Guess one | Define audience + terminology level |
+| "Handle appropriately" | What's appropriate? Whatever | Give specific values or conditional branches |
+| "High quality" | Non-determinable, self-assessed pass | Give verifiable judgment criteria |
 
-**B. 结构缺失型**
+**B. Structural Deficiency**
 
-| 你说 | 模型怎么"差不多" | 锁法 |
+| You Say | How Model "Good-Enoughs" It | Locking Method |
 |------|-----------------|------|
-| "用 JSON 格式" | 字段名？嵌套？可选？不管 | 给完整 schema 含示例 |
-| "处理异常" | 只写 try-catch 不写处理什么 | 列举异常类型+各自处理 |
-| "写测试" | 测什么？判定标准？ | 给测试用例清单+通过条件 |
-| "优化性能" | 优化什么？到什么程度？ | 给具体指标+目标值 |
-| "加上注释" | 注释什么？详略？ | 给注释规则 |
+| "Use JSON format" | Field names? Nesting? Optional? Whatever | Give complete schema with examples |
+| "Handle exceptions" | Only writes try-catch, not what to handle | List exception types + respective handling |
+| "Write tests" | Test what? What criteria? | Give test case list + pass conditions |
+| "Optimize performance" | Optimize what? To what degree? | Give specific metrics + target values |
+| "Add comments" | Comment what? How detailed? | Give commenting rules |
 
-**C. 边界不清型**
+**C. Unclear Boundaries**
 
-| 你说 | 模型怎么"差不多" | 锁法 |
+| You Say | How Model "Good-Enoughs" It | Locking Method |
 |------|-----------------|------|
-| "包括相关功能" | 什么是相关？ | 明确列举，用"只做以下"收窄 |
-| "不要太多" | 多少是太多？ | 给上限数字 |
-| "如果需要可以扩展" | 谁判断需要？ | 给判断条件→触发动作 |
-| "参考最佳实践" | 哪些实践？ | 列具体来源或搜索链接 |
-| "尽量简洁但完整" | 矛盾指令 | 拆解：哪些必须完整→哪些可以简洁 |
+| "Include relevant features" | What's relevant? | Explicitly list, narrow with "only do the following" |
+| "Not too much" | How much is too much? | Give upper limit number |
+| "Can extend if needed" | Who judges "if needed"? | Give judgment condition → trigger action |
+| "Refer to best practices" | Which practices? | List specific sources or search links |
+| "Be concise but complete" | Contradictory instruction | Decompose: which must be complete → which can be concise |
 
-**D. 隐含假设型**
+**D. Implicit Assumptions**
 
-| 你假设 | 模型不知道 | 锁法 |
+| You Assume | Model Doesn't Know | Locking Method |
 |--------|----------|------|
-| 知道目标用户 | 模型猜错受众 | 显式写明用户画像 |
-| 知道技术栈 | 模型用别的 | 显式锁定语言/框架/版本 |
-| 知道输出语言 | 模型可能用英文 | 显式指定语言 |
-| 知道上下文 | 模型没有记忆 | 显式提供或引用 |
-| 知道约束条件 | 模型自行发挥 | 显式列出硬约束+软约束 |
+| Knows target audience | Model guesses wrong audience | Explicitly write user persona |
+| Knows tech stack | Model uses something else | Explicitly lock language / framework / version |
+| Knows output language | Model may use English | Explicitly specify language |
+| Knows context | Model has no memory | Explicitly provide or reference |
+| Knows constraints | Model freely improvises | Explicitly list hard constraints + soft constraints |
 
-### 18 条反歧义校验清单
+### 18-Item Anti-Ambiguity Verification Checklist
 
-**必须实际扫描文本，禁止空口填"是"。**
+**Must actually scan the text, no empty "yes" assertions.**
 
-| # | 校验项 | 检查方法 | 修复建议 |
+| # | Check Item | Inspection Method | Fix Suggestion |
 |---|--------|---------|---------|
-| 1 | 形容词/副词量化 | 扫描"简洁/详细/专业/适当/高质量" | 替换为具体数值或可判定标准 |
-| 2 | 格式要求有完整 schema | 检查"JSON/表格/列表"是否有字段定义 | 补充完整 schema+示例 |
-| 3 | 角色定义含能力边界 | 检查"你是 XX"是否有"能做/不能做" | 补充能力边界声明 |
-| 4 | 错误处理列具体类型 | 检查"处理错误/异常"是否列举 | 列举错误类型+各自处理方式 |
-| 5 | 测试要求有判定标准 | 检查"写测试"是否有通过条件 | 补充测试用例+通过标准 |
-| 6 | 性能要求有具体指标 | 检查"优化/提升"是否有目标值 | 补充"从 X 提升到 Y" |
-| 7 | 边界双向锁定 | 检查是否有"只做/不做"声明 | 补充正向+负向清单 |
-| 8 | 输入有样例 | 检查是否有输入示例 | 补充 2-3 个样例 |
-| 9 | 输出有样例 | 检查是否有输出示例 | 补充 2-3 个样例 |
-| 10 | 术语有定义 | 扫描专业术语是否有首次定义 | 首次出现时附定义 |
-| 11 | 模糊量词已替换 | 扫描"适当/适量/按需/尽量" | 替换为具体值或条件 |
-| 12 | 开放指令已收窄 | 扫描"如果需要/可以/尽量" | 替换为"当 X 时→做 Y" |
-| 13 | 隐含假设显式化 | 扫描"默认/当然/显然" | 显式写出假设内容 |
-| 14 | 多义指令已消歧 | 扫描"这个/那个/它/上述" | 替换为明确指代对象 |
-| 15 | 步骤有顺序编号 | 检查流程是否有编号 | 补充步骤编号 |
-| 16 | 条件分支完整 | 检查 if 是否有 else | 补充 else 分支或明确"无 else" |
-| 17 | 约束可验证 | 检查每个约束是否有判定方法 | 补充"验证方法：X" |
-| 18 | 无矛盾指令 | 检查"简洁但完整""快速但准确"类 | 拆解为分层约束 |
+| 1 | Adjectives/adverbs quantified | Scan for "concise/detailed/professional/appropriate/high quality" | Replace with specific values or determinable criteria |
+| 2 | Format requirements have complete schema | Check if "JSON/table/list" has field definitions | Supplement complete schema + examples |
+| 3 | Role definition includes capability boundaries | Check if "you are XX" has "can/cannot do" | Supplement capability boundary statement |
+| 4 | Error handling lists specific types | Check if "handle errors/exceptions" is enumerated | List error types + respective handling methods |
+| 5 | Test requirements have judgment criteria | Check if "write tests" has pass conditions | Supplement test cases + pass criteria |
+| 6 | Performance requirements have specific metrics | Check if "optimize/improve" has target values | Supplement "from X to Y" |
+| 7 | Boundaries locked in both directions | Check for "only do / do not do" statements | Supplement positive + negative checklists |
+| 8 | Input has examples | Check if input examples exist | Supplement 2-3 examples |
+| 9 | Output has examples | Check if output examples exist | Supplement 2-3 examples |
+| 10 | Terminology defined | Scan for specialized terms with first-use definitions | Attach definition on first occurrence |
+| 11 | Vague quantifiers replaced | Scan for "appropriate/moderate/on-demand/try to" | Replace with specific values or conditions |
+| 12 | Open-ended instructions narrowed | Scan for "if needed / can / try to" | Replace with "when X → do Y" |
+| 13 | Implicit assumptions made explicit | Scan for "default / of course / obviously" | Explicitly write out assumed content |
+| 14 | Ambiguous references disambiguated | Scan for "this / that / it / aforementioned" | Replace with explicit referent |
+| 15 | Steps have sequential numbering | Check if processes have numbering | Supplement step numbers |
+| 16 | Conditional branches are complete | Check if if has else | Supplement else branch or explicitly state "no else" |
+| 17 | Constraints are verifiable | Check if each constraint has a verification method | Supplement "verification method: X" |
+| 18 | No contradictory instructions | Check for "concise but complete" / "fast but accurate" patterns | Decompose into layered constraints |
 
 ---
 
-## 七道闸门流水线
+## Seven-Gate Pipeline
 
 ```
-输入 → 闸门零·意图锚定（分模） → 闸门一·角色与边界 → 闸门二·结构骨架
-     → 闸门三·逐段精铸 → 闸门四·反歧义校验 → 闸门五·对抗测试 → 闸门六·收尾交付
-     → 输出(生产级提示词文档)
+Input → Gate Zero · Intent Anchoring (mode classification) → Gate One · Role & Boundaries → Gate Two · Structure Skeleton
+     → Gate Three · Section-by-Section Forging → Gate Four · Anti-Ambiguity Verification → Gate Five · ELO Ranking → Gate Six · Wrap-Up & Delivery
+     → Output (production-grade prompt document)
 ```
 
-| 闸门 | 堵什么 | 放行条件 | 交互方式 |
+| Gate | What It Blocks | Pass Condition | Interaction Style |
 |------|--------|---------|---------|
-| 零·意图锚定 | 没搞清要什么就开始写 | 意图三要素确认 + 分模 | 选择题+填空 |
-| 一·角色与边界 | 角色模糊/边界不清 | 四要素确认 | 选择题+搜索建议 |
-| 二·结构骨架 | 结构混乱 | 骨架确认，每段有明确职责 | 搜索→推荐→确认 |
-| 三·逐段精铸 | 表达不精准 | 每段通过反歧义检查 | 逐段起草+确认 |
-| 四·反歧义校验 | 歧义残留 | 18 条清单全绿 | 自动检查+修复建议 |
-| 五·对抗测试 | 实际使用翻车 | 关键指令通过 AI 测试 | 自动测试+报告 |
-| 六·收尾交付 | 遗漏 | 8 项收尾清单全绿 | 自动检查+确认 |
+| Zero · Intent Anchoring | Writing before clarifying what's needed | Intent three-element confirmation + mode classification | Multiple choice + fill-in |
+| One · Role & Boundaries | Vague role / unclear boundaries | Four-element confirmation | Multiple choice + search suggestions |
+| Two · Structure Skeleton | Chaotic structure | Skeleton confirmed, each section has clear responsibility | Search → recommend → confirm |
+| Three · Section-by-Section Forging | Imprecise expression | Each section passes anti-ambiguity check | Draft + confirm section by section |
+| Four · Anti-Ambiguity Verification | Residual ambiguity | Light: first 9 items all green; Medium/Heavy: all 18 items green | Auto check + fix suggestions |
+| Five · ELO Ranking | Single candidate, roll the dice | Light: skip; Medium/Heavy: multi-candidate PK, optimal ELO ≥1250 | Auto generate + PK + ranking table |
+| Six · Wrap-Up & Delivery | Omissions | Light: 4 items all green; Medium/Heavy: 8 items all green | Auto check + confirm |
 
 ---
 
-### 闸门零·意图锚定
+### Gate Zero · Intent Anchoring
 
-**必搜**：`"[领域] prompt engineering best practices"` + `"[目标AI] system prompt guidelines"`
+**Must search**: `"[domain] prompt engineering best practices"` + `"[target AI] system prompt guidelines"`
 
-**标准模式**：用 AskUserQuestion 提出 ≤4 问（选择题为主），确认意图三要素 → 分模确认。
+**Standard mode**: Use AskUserQuestion with ≤4 questions (mostly multiple choice), confirm intent three elements → mode classification confirmation.
 
-**审查模式**：用户已有完整方案，跳过提问。直接进入审查流程（见下方「审查模式专用流程」）。
+**Review mode**: User already has complete plan, skip questioning. Enter review process directly (see "Review Mode Process" below).
 
-**重型模式**：先问一句"要不要联网比对一下方案，看看有没有优化空间？"要→全量预搜对标（同审查模式 Step 1-2）；不要→直接进闸门一。全七道+对抗×2，每段掰开揉碎确认。
+**Heavy-Duty mode**: First ask "Want to benchmark against industry standards and see if there's room for optimization?" If yes → full pre-search benchmarking (same as Review mode Step 1-2); if no → proceed directly to Gate One. All seven gates + ELO×2, every section broken down and confirmed thoroughly.
 
-#### 必须确认的意图三要素
+#### Must-Confirm Intent Three Elements
 
-1. **做什么**：提示词的目标任务是什么？
-2. **给谁**：目标 AI 是哪个？
-3. **怎么算成功**：什么样的输出算合格？
+1. **What to do**: What is the prompt's target task?
+2. **For whom**: Which target AI?
+3. **How to measure success**: What output qualifies as passing?
 
 ```
-搜索发现（示例）：
-- Anthropic 官方建议：系统提示词应先定义角色再定义任务
-- 2025 年 prompt engineering 趋势：Chain-of-Thought + 结构化输出
+Search findings (example):
+- Anthropic official recommendation: system prompts should define role first, then task
+- 2025 prompt engineering trends: Chain-of-Thought + structured output
 
-Q1: 这个提示词用来做什么？
-  A) 代码生成/审查  B) 内容创作/写作  C) 数据分析/处理  D) 工作流自动化
+Q1: What is this prompt for?
+  A) Code generation/review  B) Content creation/writing  C) Data analysis/processing  D) Workflow automation
 
-Q2: 目标 AI 是哪个？
-  A) Claude  B) GPT  C) Gemini  D) 通用
+Q2: Which target AI?
+  A) Claude  B) GPT  C) Gemini  D) General-purpose
 
-Q3: 怎么算成功？请填空：
-  "当我把这个提示词给 AI 时，AI 应该能____"
+Q3: How do you measure success? Fill in:
+  "When I give this prompt to the AI, the AI should be able to ____"
 
-Q4: 有什么特殊约束？（可跳过）
-  A) 必须支持中文  B) 输出有格式要求  C) 有长度限制  D) 无
+Q4: Any special constraints? (can skip)
+  A) Must support Chinese  B) Output has format requirements  C) Has length limit  D) None
 ```
 
-产出「意图锚点清单」→ 分模 → 用户确认后进闸门一。
+Produce 「Intent Anchor Checklist」→ simultaneously output complexity determination (Light / Medium / Heavy) → mode classification → proceed to Gate One after user confirmation.
 
-### 闸门一·角色与边界
+Complexity determination output simultaneously after intent three-element confirmation, example:
 
-**标准/重型**：搜 `"[角色] agent prompt examples"` + `"[领域] common pitfalls prompt"` → 选择题确认四要素。
+```
+Based on your description:
+- Target: a calendar component prompt
+- Single function, clear boundaries
+→ Determination: Light tier, output basic prompt document (skip ELO, first 9 anti-ambiguity items, 4-item wrap-up)
+```
 
-**审查模式**：跳过。
+### Gate One · Role & Boundaries
 
-#### 必须确认的四要素
+**Standard / Heavy-Duty**: Search `"[role] agent prompt examples"` + `"[domain] common pitfalls prompt"` → multiple choice to confirm four elements.
 
-1. **角色**：AI 扮演什么？能力边界在哪？
-2. **输入**：AI 会收到什么？格式？
-3. **输出**：AI 应该输出什么？格式+判定标准
-4. **约束**：硬约束+软约束+不做清单
+**Review mode**: Skip.
 
-### 闸门二·结构骨架
+#### Must-Confirm Four Elements
 
-**标准/重型**：搜 `"[提示词类型] prompt structure template"` → 推荐结构 → 用户确认。
+1. **Role**: What does the AI play? What are its capability boundaries?
+2. **Input**: What will the AI receive? Format?
+3. **Output**: What should the AI output? Format + judgment criteria
+4. **Constraints**: Hard constraints + soft constraints + do-not-do list
 
-**审查模式**：跳过。
+### Gate Two · Structure Skeleton
 
-默认结构：角色定义 → 任务描述 → 输入规范 → 输出规范 → 执行约束 → 示例 → 附录
+**Standard / Heavy-Duty**: Search `"[prompt type] prompt structure template"` → recommend structure → user confirms.
+
+**Review mode**: Skip.
+
+Default structure: Role Definition → Task Description → Input Specification → Output Specification → Execution Constraints → Examples → Appendix
 
 ---
 
-### 审查模式专用流程
+### Review Mode Process
 
-触发条件：用户提供了 PRD、商业文档、原型、成熟方案等完整材料。
+Trigger condition: User has provided complete materials such as PRD, business documents, prototypes, mature plans.
 
-**Step 1：全量预搜**
+**Step 1: Full Pre-Search**
 
-针对用户方案的所有板块，一次性搜索对标：
-
-```
-搜索矩阵：
-- 角色定义 → "[角色] agent prompt best practices 2025"
-- 任务描述 → "[任务类型] prompt engineering patterns"
-- 输入规范 → "[输入类型] prompt input format examples"
-- 输出规范 → "[输出类型] structured output schema"
-- 约束/边界 → "[领域] prompt constraints best practices"
-- 整体结构 → "[提示词类型] production prompt template"
-```
-
-**Step 2：批量呈现优化点**
-
-将搜索结果对标用户方案，一次性呈现所有可优化点：
+Search benchmarks for all sections of the user's plan at once:
 
 ```
-全量预搜发现（示例）：
-
-📌 角色定义
-  你的方案已覆盖：角色名称+职责描述
-  搜索发现可加深：
-  - 87% 的生产级 agent prompt 含"能力边界声明"（能做/不能做）
-  - Anthropic 官方建议：角色定义后紧跟"行为约束"独立段
-  → 要加深吗？
-
-📌 输出规范
-  你的方案已覆盖：输出格式（JSON）
-  搜索发现可加深：
-  - 行业标准：输出规范应含完整 JSON Schema+2-3 个示例
-  - 常见坑：只说"JSON"不定义字段→AI 自由发挥字段名
-  → 要加深吗？
-
-📌 错误处理
-  你的方案未覆盖
-  搜索发现：同类 prompt 94% 含错误处理段
-  → 要补充吗？
+Search matrix:
+- Role definition → "[role] agent prompt best practices 2025"
+- Task description → "[task type] prompt engineering patterns"
+- Input specification → "[input type] prompt input format examples"
+- Output specification → "[output type] structured output schema"
+- Constraints / boundaries → "[domain] prompt constraints best practices"
+- Overall structure → "[prompt type] production prompt template"
 ```
 
-**Step 3：用户选深挖项**
+**Step 2: Batch Present Optimization Points**
 
-用户勾选要加深的板块。
+Benchmark search results against user's plan, present all optimizable points at once:
 
-**Step 4：逐项展开**
+```
+Full pre-search findings (example):
 
-对每个选中板块，搜索→起草→反歧义检查→确认。
+📌 Role Definition
+  Your plan covers: role name + responsibility description
+  Search findings suggest deepening:
+  - 87% of production-grade agent prompts include "capability boundary statement" (can/cannot do)
+  - Anthropic official recommendation: follow role definition with a standalone "behavior constraints" section
+  → Deepen?
 
-**Step 5：全部深挖项完成后，进入闸门三四五六**
+📌 Output Specification
+  Your plan covers: output format (JSON)
+  Search findings suggest deepening:
+  - Industry standard: output specification should include complete JSON Schema + 2-3 examples
+  - Common pitfall: only saying "JSON" without defining fields → AI freely invents field names
+  → Deepen?
+
+📌 Error Handling
+  Your plan does not cover
+  Search findings: 94% of similar prompts include an error handling section
+  → Supplement?
+```
+
+**Step 3: User Selects Deep-Dive Items**
+
+User checks off sections to deepen.
+
+**Step 4: Expand Item by Item**
+
+For each selected section: search → draft → anti-ambiguity check → confirm.
+
+**Step 5: After all deep-dive items complete, proceed to Gates 3-6**
 
 ---
 
-### 闸门三·逐段精铸
+### Gate Three · Section-by-Section Forging
 
-**所有模式**：每段必须过反歧义检查，不过不进下段。
+**All modes**: Every section must pass anti-ambiguity check; cannot proceed to next section without passing.
 
-对结构中每一段：搜索 → 起草 → 反歧义检查 → 用户确认。
+For each section in the structure: search → draft → anti-ambiguity check → user confirms.
 
-#### 逐段铁律
+#### Section-by-Section Iron Rules
 
-| # | 规则 | 为什么 | 违反示例 |
+| # | Rule | Why | Violation Example |
 |---|------|--------|---------|
-| 1 | 每段必须过反歧义检查 | 模型会写"适当处理"之类模糊表述 | "处理异常"未展开 |
-| 2 | 每段必须附正例 | 无正例=无法判定输出是否合格 | 输出规范只写"表格"不给样例 |
-| 3 | 段落间引用必须显式 | "上面的"指代不清 | "按上述格式输出"→改为"按 §4 输出规范的表格格式" |
-| 4 | 搜索到的最佳实践必须融入 | 不融入=白搜 | 搜到"输出含行号"但草稿没加 |
+| 1 | Every section must pass anti-ambiguity check | Model will write vague expressions like "handle appropriately" | "Handle exceptions" not expanded |
+| 2 | Every section must include positive examples | No examples = cannot determine if output qualifies | Output spec only says "table" without giving examples |
+| 3 | Cross-section references must be explicit | "The above" is ambiguous | "Output in the above format" → change to "Output in the table format per §4 Output Specification" |
+| 4 | Search-discovered best practices must be integrated | Not integrating = wasted search | Found "output includes line numbers" but draft didn't add it |
 
-### 闸门四·反歧义校验
+### Gate Four · Anti-Ambiguity Verification
 
-**所有模式**：18 条全核。禁止空口填"是"——必须逐条扫描文本验证。
+**Light tier**: First 9 items (#1-#9) scanned item by item, no empty "yes" assertions.
 
-任一为否→修复→重检该项；全部为是→下一闸门。
+**Medium / Heavy tier**: All 18 items verified. No empty "yes" assertions — must scan text and verify item by item.
 
-### 闸门五·对抗测试
-
-**标准**：3 个关键指令；**审查**：3 个关键指令；**重型**：5 个关键指令。
-
-**必搜**：`"[关键指令] AI misinterpretation cases"`
-
-对每个关键指令模拟 3 种误解，判断提示词能否防止：
-
-```
-对抗测试报告（示例）：
-
-指令1: "输出 Markdown 表格"
-  搜索发现：常见误解——AI 可能输出 HTML 表格或纯文本表格
-  测试：
-  - 误解 A: 输出 HTML 表格 → 提示词已防 ✅
-  - 误解 B: 输出纯文本对齐表格 → 提示词已防 ✅
-  - 误解 C: 表格列数不对 → 提示词已防 ✅
-
-指令2: "不修改代码，只提建议"
-  搜索发现：常见误解——AI 倾向直接输出修改后的代码
-  测试：
-  - 误解 A: 直接输出修改后代码 → 提示词已防 ✅
-  - 误解 B: 用代码块包装建议 → ⚠️ 未防，补充"建议用文字描述，不用代码块"
-  - 误解 C: 部分修改+部分建议 → 提示词已防 ✅
-```
-
-有 ⚠️ 的项→修复后重测；全部 ✅→下一闸门。
-
-### 闸门六·收尾交付
-
-**所有模式**：执行 8 项收尾清单。
+Any item fails → fix → re-check that item; all pass → next gate.
 
 ---
 
-## 执行协议
+### Gate Five · ELO Ranking
 
-### 搜索预加载
+**Core idea**: No longer rely on gut feeling to pick the "best-looking" prompt; instead, generate multiple candidates → pairwise PK → ELO quantified ranking → data speaks.
+
+**Algorithm source**: Integrated from [gpt-prompt-engineer](https://github.com/mshumer/gpt-prompt-engineer) (MIT license), K=32, starting score 1200, chess ranking algorithm.
+
+#### Execution Flow
 
 ```
-用户回答 Q_n
+Gate Four passed
   ↓
-提取关键词 + 预测 Q_{n+1} 主题
+Step 1: Generate candidates (3-5)
   ↓
-搜索（所有模式全闸门必搜）
+Step 2: Define test cases (3-5)
   ↓
-结果处理：
-  ├─ 确定性答案（≥3 来源一致/官方文档/行业标准）→ 自动采用，最后汇总
-  ├─ 多个方案 → 整理为选项+推荐标记
-  ├─ 代码/模板 → 作为填空模板
-  └─ 无有效结果 → 正常提问
+Step 3: Pairwise PK + ELO scoring
+  ↓
+Step 4: Output ranking table
+  ↓
+Step 5: User confirms top-1
+  ↓
+Gate Six
 ```
 
-### 确定性跳过规则
+#### Step 1: Generate Candidate Prompts
 
-- ≥3 个独立来源一致 → 确定性答案，自动采用
-- 官方文档（如 Anthropic/OpenAI 官方指南）明确建议 → 自动采用
-- 行业标准格式（如 REST API 必须含 status code）→ 自动采用
-- 所有自动采用项，在闸门六汇总确认
+**Light tier**: Skip ELO multi-candidate. Directly generate 1 optimized version, proceed to Gate Six.
 
-### 交互协议
+**Medium / Heavy tier**: Execute full ELO process. **Heavy tier** additionally enables ELO×2 (bidirectional scoring + additional test cases).
 
-- 每轮 ≤4 问，超过分批
-- 问题前先呈现「搜索发现」摘要（1-3 条）
-- 每个闸门结束时呈现「本闸门产出」摘要
-- 选择题附推荐标记+解释；填空题给 2-3 个示例
+Generation strategy: Based on output from Gates Zero through Four, generate candidates with different styles:
 
-**非程序员友好**（标准模式重点）：选项用大白话，技术方案用「方案名+一句话+适用场景」，代码附注释。
+```
+Candidate generation strategy:
+- Candidate A: Conservative — strictly follow user's original expression, minimal changes
+- Candidate B: Optimized — integrate search-discovered best practices, structurally enhanced
+- Candidate C: Minimalist — trim redundancy, retain core instructions, pursue token efficiency
+- Candidate D (Heavy-Duty): Radical — significantly restructure, attempt non-traditional structures
+- Candidate E (Heavy-Duty): Academic — cite sources, evidence-driven, suitable for scenarios requiring traceability
+```
+
+Each candidate must be independently complete, no references like "same as Candidate A."
+
+#### Step 2: Define Test Cases
+
+Based on intent anchors from Gate Zero, generate 3-5 test cases. Each test case should cover different scenarios:
+
+```
+Test case design principles:
+- Case 1: Typical scenario (most common usage)
+- Case 2: Boundary scenario (extreme input / ambiguous input)
+- Case 3: Adversarial scenario (input deliberately triggering AI misinterpretation)
+- Case 4 (Heavy-Duty): Stress scenario (complex / long input)
+- Case 5 (Heavy-Duty): Multi-language / cross-domain scenario
+```
+
+#### Step 3: Pairwise PK + ELO Scoring
+
+```
+ELO algorithm parameters:
+- Initial score: 1200
+- K factor: 32
+- Expected win rate: E_A = 1 / (1 + 10^((R_B - R_A) / 400))
+- Score update: R_A_new = R_A + K × (S_A - E_A)
+  where S_A = 1 (A wins) / 0.5 (draw) / 0 (B wins)
+```
+
+**PK Rules**:
+
+1. All candidate pairs, each pair runs one PK round per test case
+2. Each PK round: two candidates each generate output for the same test case → judge model blind evaluation, output A or B
+3. **Bidirectional scoring**: A vs B and B vs A each evaluated once, take average, eliminate position bias
+4. Judge model prompt:
+
+```
+"Your task is to compare the quality of two AI outputs.
+
+Task description: {description}
+Test input: {test_case}
+Output A: {generation_a}
+Output B: {generation_b}
+
+Comparison criteria:
+- Whether the specified task is accurately completed
+- Whether all constraints are precisely followed
+- Whether the output format is standardized
+- Whether there is any ambiguity or vagueness
+
+Which output is better? Answer only 'A' or 'B'. If truly indistinguishable, answer 'DRAW'."
+```
+
+5. Update ELO scores after each PK round
+6. Total rounds = candidate count × (candidate count - 1) / 2 × test case count
+
+**Calculation Example**:
+
+```
+Candidate A (1200) vs Candidate B (1200), Test Case 1:
+
+A generates → Output A
+B generates → Output B
+Judge → A
+
+Bidirectional: A vs B → A wins; B vs A → A wins → average S_A = 1.0
+
+E_A = 1 / (1 + 10^((1200-1200)/400)) = 0.5
+R_A_new = 1200 + 32 × (1.0 - 0.5) = 1216
+R_B_new = 1200 + 32 × (0.0 - 0.5) = 1184
+```
+
+#### Step 4: Output Ranking Table
+
+```
+ELO Ranking Results (2 candidates × 3 test cases = 3 PK rounds):
+
+┌──────────┬────────┬──────────────────────────────────────┐
+│ Rank     │ ELO    │ Candidate                            │
+├──────────┼────────┼──────────────────────────────────────┤
+│ 🥇 1st   │ 1285   │ Candidate B (Optimized)              │
+│ 🥈 2nd   │ 1160   │ Candidate A (Conservative)           │
+│ 🥉 3rd   │ 1155   │ Candidate C (Minimalist)             │
+└──────────┴────────┴──────────────────────────────────────┘
+
+Recommendation: Candidate B (Optimized), ELO 1285, 2 wins 1 draw across 3 test cases.
+
+Key difference analysis:
+- Candidate B significantly outperforms others in boundary scenario (Case 2)
+- Candidate C performs well in typical scenario (Case 1) but is bypassed by AI in adversarial scenario (Case 3)
+- Candidate A performs consistently but has no standout advantages
+```
+
+#### Step 5: User Confirmation
+
+User selects top-1 (or accepts recommendation), proceed to Gate Six.
+
+**If highest ELO < 1250**: Indicates all candidate quality is insufficient, return to Gate Three to rewrite problematic sections, then re-run ELO.
+
+**If highest ELO ≥ 1400**: Indicates candidate quality significantly exceeds baseline, auto-recommend.
 
 ---
 
-## 收尾与交付
+### Gate Six · Wrap-Up & Delivery
 
-### 8 项收尾清单
+**Light tier**: Execute 4-item wrap-up checklist (first 4 items).
 
-- [ ] 18 条反歧义清单全绿
-- [ ] 无 AIGC metadata 残留（"作为 AI 语言模型"等——逐行检查）
-- [ ] Token 效率检查（无冗余重复表述，每段职责不重叠）
-- [ ] 格式一致性（标题层级/列表风格/代码块语言标记统一）
-- [ ] 已自动填充项汇总确认
-- [ ] 与用户原始意图的偏差说明（如有）
-- [ ] 配套 super-spec 使用建议（如需分解为工程文档）
-- [ ] 版本号 + 日期 + 变更摘要
+**Medium / Heavy tier**: Execute 8-item wrap-up checklist. **Heavy tier** additionally adds test cases + regression verification.
 
-### 输出文档结构
+---
+
+## Execution Protocol
+
+### Search Preloading
+
+```
+User answers Q_n
+  ↓
+Extract keywords + predict Q_{n+1} topic
+  ↓
+Search (all modes, all gates must search)
+  ↓
+Result processing:
+  ├─ Deterministic answer (≥3 sources agree / official docs / industry standard) → auto-adopt, summarize at end
+  ├─ Multiple options → organize as choices + recommendation marker
+  ├─ Code / templates → use as fill-in templates
+  └─ No valid results → ask questions normally
+```
+
+### Deterministic Skip Rules
+
+- ≥3 independent sources agree → deterministic answer, auto-adopt
+- Official documentation (e.g., Anthropic/OpenAI official guides) explicitly recommends → auto-adopt
+- Industry standard format (e.g., REST API must include status code) → auto-adopt
+- All auto-adopted items, summarized and confirmed at Gate Six
+
+### Interaction Protocol
+
+- ≤4 questions per round, batch if exceeding
+- Present 「Search Findings」 summary (1-3 items) before questions
+- Present 「This Gate's Output」 summary at the end of each gate
+- Multiple choice questions include recommendation marker + explanation; fill-in questions provide 2-3 examples
+
+**Non-programmer friendly** (Standard mode focus): Options in plain language, technical solutions use "solution name + one-sentence summary + applicable scenario," code includes comments.
+
+---
+
+## Wrap-Up & Delivery
+
+### 8-Item Wrap-Up Checklist (Medium/Heavy full; Light first 4 items only)
+
+- [ ] 1. Anti-ambiguity verification passed (Light: 9 items / Medium-Heavy: 18 items)
+- [ ] 2. No AIGC metadata residue ("as an AI language model" etc. — check line by line)
+- [ ] 3. Token efficiency check (no redundant repeated expressions, each section's responsibility does not overlap)
+- [ ] 4. Format consistency (heading levels / list styles / code block language tags unified)
+- [ ] 5. Auto-filled items summary confirmation
+- [ ] 6. Deviation explanation from user's original intent (if any)
+- [ ] 7. ELO ranking results attached (with complete PK records)
+- [ ] 8. Version number + date + change summary
+
+### Output Document Structure
 
 ```markdown
-# [提示词标题] v1.0
+# [Prompt Title] v1.0
 
-## 元信息
-- 目标AI / 提示词类型 / 模式 / 创建日期
+## Meta Information
+- Target AI / Prompt Type / Mode / Creation Date / ELO Score
 
-## 角色定义
-[精准角色 + 能力边界（能做/不能做）]
+## Role Definition
+[Precise role + capability boundaries (can/cannot do)]
 
-## 任务描述
-[具体做什么 + 怎么做 + 编号步骤]
+## Task Description
+[What specifically to do + how to do it + numbered steps]
 
-## 输入规范
-[输入格式 + 2-3 个样例]
+## Input Specification
+[Input format + 2-3 examples]
 
-## 输出规范
-[输出格式 + 完整 schema + 2-3 个样例 + 判定标准]
+## Output Specification
+[Output format + complete schema + 2-3 examples + judgment criteria]
 
-## 执行约束
-[硬约束 + 软约束 + 边界清单（只做/不做）]
+## Execution Constraints
+[Hard constraints + soft constraints + boundary checklist (only do / do not do)]
 
-## 示例
-[2-3 组完整的输入→输出样例]
+## Examples
+[2-3 complete input → output example pairs]
 
-## 反歧义声明
-[本提示词已通过 18 条反歧义校验，校验日期: YYYY-MM-DD]
+## Anti-Ambiguity Statement
+[This prompt has passed 18-item anti-ambiguity verification, verification date: YYYY-MM-DD]
 
-## 附录
-[术语表 + 参考来源 + 变更记录]
+## Appendix
+[Glossary + reference sources + ELO ranking records + change log]
 ```
 
 ---
 
-## 铁律（违反即重跑）
+## Iron Rules (violation = re-run)
 
-| # | 规则 | 为什么不可妥协 |
-|---|------|--------------|
-| 1 | 确定性问题禁止提问 → 自动采用+最后汇总 | 有行业准则还问=浪费用户时间 |
-| 2 | 每段必须过反歧义检查 → 不过不进下段 | 核心质量保障 |
-| 3 | 禁止空口通过 → 必须扫描文本验证 | 模型会不读草稿直接填"是" |
-
----
-
-## 降级与异常
-
-- 搜索不可用 → 正常提问，标注"未搜索，仅供参考"
-- 用户中途中止 → 保留当前草稿+进度
-- 用户输入太模糊 → 闸门零多问一轮（≤4 问）
-- 对抗测试全部失败 → 回闸门三重写有问题段落
-- 用户是资深工程师 → 走审查模式
+| # | Rule | Why Non-Negotiable | Exception |
+|---|------|--------------|------|
+| 1 | Deterministic questions must not be asked → auto-adopt + summarize at end | Asking when industry standards exist = wasting user's time | None |
+| 2 | Every section must pass anti-ambiguity check → cannot proceed to next section without passing | Core quality assurance | Light tier only checks first 9 items |
+| 3 | No empty assertions allowed → must scan text and verify | Model will skip reading draft and directly assert "yes" | None |
+| 4 | ELO must run all candidate pairs → no skipping pairs | Skipping pairs = ranking distortion | Light tier skips ELO |
 
 ---
 
-## 与 super-spec 配合
+## Degradation & Exceptions
 
-```
-[super-prompt 产出: 提示词文档]
-  ↓
-[super-spec 分解为五份工程文档]
-  ├── CONSTITUTION.md  ← 提示词中的约束→宪章
-  ├── spec.md          ← 提示词中的任务→需求
-  ├── tasks.md         ← 提示词中的步骤→任务
-  ├── checklist.md     ← 提示词中的判定标准→验收
-  └── decisions.md     ← 提示词中的设计决策→拍板
-```
-
-简单提示词只用 super-prompt；复杂提示词 super-prompt 精铸 → super-spec 分解。
+- Search unavailable → ask questions normally, mark "not searched, for reference only"
+- User aborts mid-process → preserve current draft + progress
+- User input too vague → Gate Zero asks one more round (≤4 questions)
+- ELO highest score < 1250 → return to Gate Three to rewrite problematic sections (Light tier not applicable)
+- User is senior engineer → use Review mode
+- Light tier project user adds complexity after Gate Zero → upgrade to Medium/Heavy, re-run differential items for passed gates
 
 ---
 
-## 参考模式（实战验证）
+## Maintenance Obligations
 
-以下是从真实项目中验证过的好做法。**不是必须照做，是见过好用的思路。**
+| Trigger | Action |
+|------|------|
+| User modifies requirements | Return to corresponding gate, re-run, cascade-update subsequent gates |
+| ELO ranking discovers new misinterpretation | Supplement to prompt constraint section, simultaneously update anti-ambiguity checklist |
+| New terminology added | Supplement to appendix glossary |
+| Output format changed | Re-run Gate Four anti-ambiguity verification |
+| Target AI changed | Re-run Gate Zero search (different AI has different best practices) |
+| Companion super-spec | Use prompt document as super-spec input |
 
-### 交互节奏参考
+---
 
-| 闸门 | 典型问题数 | 节奏 |
+## Reference Patterns (Battle-Tested)
+
+The following are good practices validated from real projects. **Not mandatory to follow, but proven effective approaches.**
+
+### Interaction Rhythm Reference
+
+| Gate | Typical Question Count | Rhythm |
 |------|----------|------|
-| 零·意图锚定 | 3-4 问 | 快速锁定——选择题为主，1 个填空 |
-| 一·角色与边界 | 3-4 问 | 搜索驱动——选项来自搜索结果 |
-| 二·结构骨架 | 1-2 问 | 确认为主——推荐骨架+用户调整 |
-| 三·逐段精铸 | 每段 1-2 问 | 起草+确认——每段附反歧义检查结果 |
-| 四·反歧义校验 | 0-2 问 | 自动为主——仅修复项需用户确认 |
-| 五·对抗测试 | 0-2 问 | 自动为主——仅修复项需用户确认 |
-| 六·收尾交付 | 1 问 | 汇总确认——自动填充项+偏差说明 |
+| Zero · Intent Anchoring | 3-4 questions | Quick lock-in — mostly multiple choice, 1 fill-in |
+| One · Role & Boundaries | 3-4 questions | Search-driven — options sourced from search results |
+| Two · Structure Skeleton | 1-2 questions | Confirmation-oriented — recommend skeleton + user adjusts |
+| Three · Section-by-Section Forging | 1-2 questions per section | Draft + confirm — each section includes anti-ambiguity check result |
+| Four · Anti-Ambiguity Verification | 0-2 questions | Auto-oriented — only fix items need user confirmation |
+| Five · ELO Ranking | 1 question | Auto-oriented — present ranking table + user confirms top-1 |
+| Six · Wrap-Up & Delivery | 1 question | Summary confirmation — auto-filled items + deviation explanation |
 
-**总交互轮次**：4-7 轮（简单）/ 7-12 轮（复杂），每轮 ≤4 问。
+**Total interaction rounds**: 4-7 rounds (simple) / 7-12 rounds (complex), ≤4 questions per round.
 
-### 搜索注入示范
+### Search Injection Demonstration
 
-好的搜索注入——选项有来源+解释+推荐：
-
-```
-搜索发现：
-- Anthropic 官方建议：Claude 系统提示词应先定义角色再定义任务
-- GitHub 高星项目提示：代码审查 agent 应含"不做清单"防越界
-
-Q1: AI 应该扮演什么角色？
-  A) 高级代码审查员：关注逻辑+安全+可维护性 ← 推荐（覆盖面广，来源：Anthropic 指南）
-  B) 安全审计专家：只关注安全漏洞（来源：OWASP 代码审查指南）
-  C) 性能优化专家：只关注性能问题
-  D) 其他：____
-```
-
-不好的搜索注入——选项无来源无解释：
+Good search injection — options have source + explanation + recommendation:
 
 ```
-Q1: AI 扮演什么角色？
+Search findings:
+- Anthropic official recommendation: Claude system prompts should define role first, then task
+- High-star GitHub project tip: code review agents should include "do-not-do list" to prevent overreach
+
+Q1: What role should the AI play?
+  A) Senior Code Reviewer: focus on logic + security + maintainability ← Recommended (broad coverage, source: Anthropic guide)
+  B) Security Audit Specialist: focus only on security vulnerabilities (source: OWASP Code Review Guide)
+  C) Performance Optimization Specialist: focus only on performance issues
+  D) Other: ____
+```
+
+Bad search injection — options have no source or explanation:
+
+```
+Q1: What role does the AI play?
   A) Code Reviewer
   B) Security Auditor
   C) Performance Optimizer
 ```
 
-### 反歧义修复示范
+### Anti-Ambiguity Fix Demonstration
 
 ```
-修复前（❌ 有歧义）：
-"输出简洁的代码审查报告，包含问题描述和修复建议"
+Before fix (❌ ambiguous):
+"Output a concise code review report, including issue description and fix suggestion"
 
-修复后（✅ 无歧义）：
-"输出代码审查报告，格式为 Markdown 表格，包含 4 列：
-  | 严重程度 | 位置 | 问题描述 | 修复建议 |
+After fix (✅ unambiguous):
+"Output a code review report in Markdown table format with 4 columns:
+  | Severity | Location | Issue Description | Fix Suggestion |
   
-  要求：
-  - 严重程度使用 P0（阻断级）/P1（严重）/P2（建议）三级
-  - 位置必须含文件名+行号（如 main.py:42）
-  - 问题描述 ≤2 句话，必须说明为什么是问题
-  - 修复建议必须给出具体代码或明确步骤"
+  Requirements:
+  - Severity uses P0 (blocking) / P1 (serious) / P2 (suggestion) three levels
+  - Location must include filename + line number (e.g., main.py:42)
+  - Issue description ≤2 sentences, must explain why it's an issue
+  - Fix suggestion must provide specific code or clear steps"
 ```
 
-### 自动填充汇总示范（闸门六）
+### ELO Ranking Demonstration
 
 ```
-已自动填充项（按行业准则自动采用，请确认）：
+ELO Ranking Results (3 candidates × 3 test cases = 9 PK rounds):
 
-| # | 填充项 | 采用值 | 来源 | 原因 |
+┌──────────┬────────┬─────────────────────────────────────────────┐
+│ Rank     │ ELO    │ Candidate                                    │
+├──────────┼────────┼─────────────────────────────────────────────┤
+│ 🥇 1st   │ 1285   │ Candidate B (Optimized)                      │
+│ 🥈 2nd   │ 1160   │ Candidate A (Conservative)                   │
+│ 🥉 3rd   │ 1155   │ Candidate C (Minimalist)                     │
+└──────────┴────────┴─────────────────────────────────────────────┘
+
+PK Detailed Records:
+
+Candidate A vs Candidate B:
+  Case 1 (typical): A's output is standardized but stiff, B's output is natural and precise → B wins
+  Case 2 (boundary): A's output is verbose, B's output is concise and on-point → B wins
+  Case 3 (adversarial): A is bypassed, B successfully defends → B wins
+
+Candidate A vs Candidate C:
+  Case 1 (typical): A is complete but verbose, C is minimalist but omits → A wins
+  Case 2 (boundary): A is too conservative, C is flexible but vague → Draw
+  Case 3 (adversarial): A partially defends, C is bypassed → A wins
+
+Candidate B vs Candidate C:
+  Case 1 (typical): B is precise, C omits key constraints → B wins
+  Case 2 (boundary): B is robust, C over-simplifies → B wins
+  Case 3 (adversarial): B fully defends, C is bypassed → B wins
+
+Recommendation: Candidate B (Optimized), ELO 1285, 3 wins out of 3.
+```
+
+### Auto-Fill Summary Demonstration (Gate Six)
+
+```
+Auto-filled items (auto-adopted per industry standards, please confirm):
+
+| # | Filled Item | Adopted Value | Source | Reason |
 |---|--------|--------|------|------|
-| 1 | 角色定义顺序 | 角色先于任务 | Anthropic 官方指南 | 3 个独立来源一致 |
-| 2 | 输出含行号 | 是 | OWASP 代码审查指南 | 行业标准 |
-| 3 | 错误分级 | P0/P1/P2 三级 | 通用缺陷分级标准 | ≥3 个来源一致 |
+| 1 | Role definition order | Role before task | Anthropic official guide | 3 independent sources agree |
+| 2 | Output includes line numbers | Yes | OWASP Code Review Guide | Industry standard |
+| 3 | Error severity levels | P0/P1/P2 three levels | Universal defect severity standard | ≥3 sources agree |
 
-以上 3 项已自动填充，如需修改请告知。
+The above 3 items have been auto-filled. Please let us know if modifications are needed.
 ```
 
 ---
 
-## 维护义务
+## Change Log
 
-| 触发 | 操作 |
-|------|------|
-| 用户修改需求 | 回到对应闸门重跑，后续闸门级联更新 |
-| 对抗测试发现新误解 | 补充到提示词约束段 |
-| 新增术语 | 补充到附录术语表 |
-| 输出格式变更 | 重跑闸门四反歧义校验 |
-| 目标 AI 变更 | 重跑闸门零搜索（不同 AI 最佳实践不同） |
-| 配套 super-spec | 将提示词文档作为 super-spec 输入 |
+- **v1.0** (2026-07-23):
+  - Seven-gate guided interaction + web search preloading + 18-item anti-ambiguity system
+  - Three input modes: Standard / Review / Heavy-Duty + Fast Track
+  - Output complexity tiers (Light / Medium / Heavy), orthogonal to input modes
+  - Seventh design principle: output on demand, no excess, no shortfall
+  - Heavy tier additional probing: networking / multiplayer / scale / real-time sync
+  - ELO multi-candidate ranking system, integrated from gpt-prompt-engineer (MIT license)
+  - Multi-candidate generation strategy, bidirectional scoring to eliminate position bias
+  - Gates 4/5/6, Iron Rules, wrap-up tiered by output complexity
+  - Degradation & exception handling: including Light tier upgrade scenarios
