@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.2.0 (2026-07-24)
+
+### Added
+- 🔒 Security Declaration section
+- 🧩 Four-Element Quick Diagnostic Framework (Role/Task/Constraints/Output)
+- 🔍 Diagnostic Five Questions for reverse attribution
+- ⚖️ Proportional Complexity Principle (simple/medium/complex tiering)
+- 🛡️ Injection risk awareness in Gate 5 adversarial testing
+
+### Changed
+- Complete English translation of SKILL.md
+- Description updated: "ELO ranking" → "seven gates"
+- Enhanced description with SEO keywords
+- README title updated to v2.2 with improved search terms
+
+### Fixed
+- AIGC metadata cleanup from all documents
+
+
 ## v2.1 (2026-07-24)
 
 ### Six-Tier Input Grading
