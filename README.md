@@ -83,15 +83,20 @@ Super-Prompt guides you through seven sequential gates — each one must pass be
 | **G5: ELO Ranking** | ELO tournament ranking for multiple candidates (K=32, baseline 1200) | Shipping the first prompt you wrote instead of the best one |
 | **G6: Delivery** | Final prompt + Quick Reference Card + maintenance obligations | Deploying a prompt without knowing how to maintain it |
 
-### Output Complexity: Light / Medium / Heavy
+### Output Complexity: Six-Tier Adaptive
 
-Super-Prompt auto-detects project complexity and adjusts output depth:
+Super-Prompt auto-detects input sophistication and adapts the funnel depth. No more forcing a four-layer funnel on a professional user with a complete PRD.
 
-| Mode | When to Use | What You Get |
-|------|------------|--------------|
-| **Light** | One-liner optimization, simple classification | Gate 1 rule engine only, no LLM invocation |
-| **Medium** | Defined scenario but incomplete prompt | G1→G3→G5, standard ELO ranking |
-| **Heavy** | Agent system prompts, production-grade prompts | Full 7 gates + 18 anti-ambiguity items + ELO×2 |
+| Tier | What It Feels Like | Funnel Depth |
+|------|-------------------|--------------|
+| **① One-liner** | "Write me a prompt" | Full 4-layer funnel |
+| **② Missing params** | Has direction, missing details | Problem discovery + assumption deconstruction |
+| **③ Clear requirement** | 200-500 word description, logically coherent | Confirm → Simulate gaps → "Which gaps to fill?" |
+| **④ Diagnostic** | "Review my prompt" | Direct anti-ambiguity scan |
+| **⑤ Existing prompt** | User brings a prompt to optimize | Review + gap simulation |
+| **⑥ Complete document** | Full PRD/spec | Review + gap simulation |
+
+For tiers ③⑤⑥, the choice to deepen is always offered — never forced. Professional users get professional treatment.
 
 ### Input Modes
 
@@ -117,9 +122,35 @@ G0 received a major upgrade in v2.0. For non-technical users who describe their 
 **Core premise**: Users don't say what they need — they say what they think the solution is. Every word is a pointer, not the requirement body. Super-Prompt deconstructs these pointers to uncover the real requirements.
 
 **Validated results**: 
-- Chinese calendar widget case: coverage improved from 15% → 100% (16/16 requirements found)
+- Chinese calendar widget: coverage improved from 15% → 100% (16/16 requirements found)
 - Pomodoro timer case: 3/8 → 8/8 requirements found
 - Knowledge management system case: 3/14 → 14/14 requirements found
+- **v2.1 Chinese calendar widget (280 words, tier ③)**: 4-layer funnel → information completeness simulation → 3 gaps surfaced → user filled 1 (city) → full prompt generated. "Better than I expected."
+
+### v2.1: Six-Tier Input Grading
+
+G0 no longer treats all users the same. Super-Prompt now classifies input into six tiers and adapts funnel depth accordingly:
+
+| Tier | Input Pattern | Process |
+|------|--------------|---------|
+| ① One-liner | "Write me a prompt," no context | Full four-layer funnel |
+| ② Missing params | Has direction but missing key info | Streamlined: problem discovery + assumption deconstruction |
+| ③ Clear requirement | Complete description, logically coherent | Confirm understanding → Information completeness simulation → "Which gaps to fill?" |
+| ④ Diagnostic | "Review this prompt for issues" | Direct anti-ambiguity 18-item scan |
+| ⑤ Existing prompt optimization | User brings a prompt to improve | Review mode + information completeness simulation |
+| ⑥ Complete document | Full PRD/spec/structured doc | Review mode + information completeness simulation |
+
+**Key principle**: For professional users, the choice is offered — never forced. The four-layer funnel is a tool, not a cage.
+
+### v2.1: Information Completeness Simulation
+
+Instead of asking "Do you want to dig deeper?" (abstract and unhelpful), Super-Prompt **simulates a dry run** and reports gaps with three markers:
+
+- ✅ **Confirmed** — User said it, no need to ask
+- ⚠️ **Guessing** — Agent can guess but shouldn't; guessing wrong causes failures; must ask
+- ❌ **Missing** — Can't run without it; must fill
+
+The ⚠️ marker is the innovation: the agent *can* guess many things (zoom range, color scheme, tech stack), but guessing = gambling. This forces the agent to surface assumptions as explicit questions.
 
 ### v2.1: Multi-Format Output
 
@@ -139,6 +170,12 @@ G0 received a major upgrade in v2.0. For non-technical users who describe their 
 **Principle**: Give users intuitive understanding. If plain text isn't enough, supplement with visuals, documents, audio, or links.
 
 ## Features
+
+### 🎯 Six-Tier Adaptive Grading
+Super-Prompt classifies your input into six tiers — from one-liners to complete PRDs — and adapts the funnel depth accordingly. Professional users get professional treatment: the four-layer funnel is offered, never forced.
+
+### 🧠 Information Completeness Simulation
+Before writing a single prompt word, Super-Prompt simulates a dry run of your requirement and reports gaps with three markers: ✅ Confirmed, ⚠️ Guessing (agent can guess but shouldn't), ❌ Missing. No more "does this look right?" — you get a structured gap report and choose what to fill.
 
 ### 🔍 Web Pre-Search Engine
 Before asking you a single question, Super-Prompt searches the web for domain-specific knowledge, industry best practices, known edge cases, and common pitfalls. This means your prompt is backed by evidence, not assumptions.

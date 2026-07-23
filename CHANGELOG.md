@@ -2,6 +2,31 @@
 
 ## v2.1 (2026-07-24)
 
+### Six-Tier Input Grading
+
+Replaced the old three-tier (Light/Medium/Heavy) auto-detection with a **six-tier input classification** that adapts the funnel depth to user sophistication:
+
+| Tier | Input Pattern | Process |
+|------|--------------|---------|
+| ① One-liner | "Write me a prompt," no context | Full four-layer funnel |
+| ② Missing params | Has direction but missing key info | Streamlined: problem discovery + assumption deconstruction |
+| ③ Clear requirement | Complete description, logically coherent | Confirm understanding → Information completeness simulation → "Which gaps to fill?" |
+| ④ Diagnostic | "Review this prompt for issues" | Direct anti-ambiguity 18-item scan |
+| ⑤ Existing prompt optimization | User brings a prompt to improve | Review mode + information completeness simulation |
+| ⑥ Complete document | Full PRD/spec/structured doc | Review mode + information completeness simulation |
+
+**Key principle**: For professional users (tiers ③⑤⑥), the choice to deepen requirements is offered — never forced. The four-layer funnel is a tool, not a cage.
+
+### Information Completeness Simulation
+
+Instead of asking "Do you want to dig deeper?" (which is abstract and unhelpful), Super-Prompt now **simulates a dry run** of the requirement and reports gaps with three markers:
+
+- ✅ **Confirmed** — User said it, no need to ask
+- ⚠️ **Guessing** — Agent can guess but shouldn't; guessing wrong causes failures; must ask
+- ❌ **Missing** — Can't run without it; must fill
+
+**Why this matters**: The agent can guess many things (zoom range, color scheme, tech stack), but guessing = gambling. The ⚠️ marker forces the agent to surface these as explicit questions rather than silently filling in assumptions.
+
 ### Multi-Format Output
 
 **Not just text.** Super-Prompt now delivers content in multiple formats based on what users need to understand:
@@ -21,6 +46,9 @@
 - One question at a time (not multiple questions bundled together)
 - Each question includes 1-2 concrete examples
 - Share search results with users before asking questions — help them open their thinking
+
+### Validated Test
+- Chinese calendar desktop widget (280 words, tier ③): 4-layer funnel → information completeness simulation → 3 gaps surfaced → user filled 1 (city) → full prompt generated. User feedback: "Better than I expected."
 
 ---
 
