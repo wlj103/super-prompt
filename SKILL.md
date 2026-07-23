@@ -1,6 +1,6 @@
 ---
 name: "super-prompt"
-description: "引导式提示词精铸——反歧义拦截×联网预搜索×分层引导，从一句话到生产级提示词。需要写提示词/系统提示词/agent指令/SOP时调用。"
+description: "提示词工程工具：反歧义拦截×联网预搜索×分层引导×ELO排名，从一句话到生产级提示词。适用于Claude/GPT/Agent系统提示词、SOP、Agent指令。触发词：写提示词、精铸提示词、优化prompt、写系统提示词。"
 license: MIT
 ---
 

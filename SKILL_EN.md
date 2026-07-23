@@ -1,6 +1,6 @@
 ---
 name: "super-prompt"
-description: "Guided Prompt Forging — Anti-Ambiguity Interception × Pre-Search × Layered Guidance × ELO Ranking, from one sentence to production-grade prompt. Use when writing prompts/system prompts/agent instructions/SOPs."
+description: "Prompt Engineering Tool: Anti-Ambiguity Interception × Web Pre-Search × Layered Guidance × ELO Ranking. Forge production-grade prompts for Claude, GPT, Gemini, and AI agents. Use when writing prompts, system prompts, agent instructions, or SOPs. Trigger: 'write a prompt', 'optimize my prompt', 'forge a prompt'."
 license: MIT
 ---
 
