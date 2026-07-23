@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.1 (2026-07-24)
+
+### Multi-Format Output
+
+**Not just text.** Super-Prompt now delivers content in multiple formats based on what users need to understand:
+
+- **Flowcharts** (Draw.io / Mermaid) — for decision trees and branching logic
+- **Architecture diagrams** — for system architecture and component relationships
+- **Data flow diagrams** — for processing pipelines
+- **Mind maps** — for concept relationships and knowledge structures
+- **Charts** (bar, pie, line) — for data comparison and statistics
+- **Podcast audio / video** — for demo and presentation needs
+- **Direct links** — for external reference resources
+- **Formal documents** (.docx / .pptx / PDF) — for client/team delivery with embedded images
+
+**Principle**: Give users intuitive understanding. If plain text isn't enough, supplement with visuals, documents, audio, or links.
+
+### Interaction Rules
+- One question at a time (not multiple questions bundled together)
+- Each question includes 1-2 concrete examples
+- Share search results with users before asking questions — help them open their thinking
+
+---
+
 ## v2.0 (2026-07-24)
 
 ### G0: Four-Layer Requirements Mining Funnel

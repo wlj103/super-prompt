@@ -1,4 +1,4 @@
-# Super-Prompt v2.0: Precision Prompt Forging
+# Super-Prompt v2.1: Precision Prompt Forging
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Standard: Agent Skills](https://img.shields.io/badge/Standard-Agent%20Skills-6e3ef7.svg)](https://agentskills.io)
@@ -120,6 +120,23 @@ G0 received a major upgrade in v2.0. For non-technical users who describe their 
 - Chinese calendar widget case: coverage improved from 15% → 100% (16/16 requirements found)
 - Pomodoro timer case: 3/8 → 8/8 requirements found
 - Knowledge management system case: 3/14 → 14/14 requirements found
+
+### v2.1: Multi-Format Output
+
+**Not just text.** When the prompt involves workflows, architectures, data flows, or concept relationships, Super-Prompt now generates supplemental visual outputs:
+
+| Scenario | Output |
+|----------|--------|
+| Decision trees / branching logic | Flowcharts (Draw.io / Mermaid) |
+| System architecture / component relationships | Architecture diagrams |
+| Data flows / processing pipelines | Data flow diagrams |
+| Concept relationships / knowledge structures | Mind maps |
+| Data comparison / statistics | Charts (bar, pie, line) |
+| Demo / presentation needs | Podcast audio or video |
+| External reference resources | Direct links |
+| Formal client/team delivery | .docx / .pptx / PDF with embedded images |
+
+**Principle**: Give users intuitive understanding. If plain text isn't enough, supplement with visuals, documents, audio, or links.
 
 ## Features
 
