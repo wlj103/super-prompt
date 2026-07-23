@@ -8,7 +8,7 @@
 
 <p align="center">
   <b>Install:</b> <code>npx skills add wlj103/super-prompt</code> &nbsp;|&nbsp;
-  <b>Trigger:</b> "帮我写一个提示词" / "精铸提示词" / "optimize my prompt"
+  <b>Trigger:</b> "write me a prompt" / "optimize my prompt" / "forge a prompt"
 </p>
 
 ## Table of Contents
@@ -65,8 +65,8 @@ Then trigger with any of these:
 
 | Language | Trigger Phrases |
 |---|---|
-| **Chinese** | "帮我写一个提示词" / "帮我优化这段 prompt" / "精铸提示词" |
 | **English** | "write me a prompt" / "optimize my prompt" / "forge a prompt" |
+| **中文** | "帮我写一个提示词" / "帮我优化这段 prompt" / "精铸提示词" |
 
 ## How It Works
 
