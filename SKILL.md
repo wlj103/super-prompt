@@ -261,11 +261,11 @@ Input → Gate Zero · Intent Anchoring (mode classification) → Gate One · Ro
 
 **Why**: For small projects, product requirements are discovered through conversation. Jumping to prompt classification without understanding the product leads to prompts that nail the format but miss what the product actually is.
 
-**Ask 2-3 questions, conversational:**
+**Ask 3 questions, conversational:**
 
-1. What does this product do, and who is it for?
-2. Walk me through the main thing a user does with it — from open to done.
-3. Any hard constraints? (platform, language, offline, etc.)
+1. What problem does this solve?
+2. What are the core functional requirements?
+3. How do you know it's done right? (acceptance criteria)
 
 After the user answers, summarize in 1-2 sentences what you understood, get confirmation, then proceed to intent confirmation.
 
