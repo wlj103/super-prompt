@@ -63,10 +63,9 @@ npx skills add wlj103/super-prompt
 
 Then trigger with any of these:
 
-| Language | Trigger Phrases |
-|---|---|
-| **English** | "write me a prompt" / "optimize my prompt" / "forge a prompt" |
-| **中文** | "帮我写一个提示词" / "帮我优化这段 prompt" / "精铸提示词" |
+- "write me a prompt"
+- "optimize my prompt"  
+- "forge a prompt"
 
 ## How It Works
 
