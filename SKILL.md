@@ -1,6 +1,6 @@
 ---
 name: "super-prompt"
-description: "Prompt engineering tool: anti-ambiguity interception × web pre-search × layered guidance × seven gates, from one sentence to production-grade prompts. Suitable for Claude/GPT/Agent system prompts, SOPs, Agent instructions. Supports multi-format delivery: flowcharts, architecture diagrams, mind maps, podcasts, documents, etc. Trigger words: write prompt, refine prompt, optimize prompt, write system prompt."
+description: "AI prompt engineering tool: anti-ambiguity interception × web pre-search × layered guidance × seven-gate pipeline. Turns one sentence into production-grade prompts for Claude, GPT, and AI agents. Supports system prompts, SOPs, agent instructions with multi-format delivery (diagrams, podcasts, docs). Trigger: write prompt, refine prompt, optimize prompt, write system prompt."
 license: MIT
 ---
 
