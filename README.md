@@ -1,4 +1,4 @@
-# Super-Prompt: Precision Prompt Forging
+# Super-Prompt v2.0: Precision Prompt Forging
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Standard: Agent Skills](https://img.shields.io/badge/Standard-Agent%20Skills-6e3ef7.svg)](https://agentskills.io)
@@ -75,7 +75,7 @@ Super-Prompt guides you through seven sequential gates — each one must pass be
 
 | Gate | What It Does | What It Prevents |
 |------|-------------|------------------|
-| **G0: Intent Clarification** | Extracts concrete goals from vague user requests | AI guessing blindly because you said "make it better" |
+| **G0: Product Understanding** | Four-layer funnel: STAR problem discovery → assumption deconstruction → body mining → hypothesis map gap analysis | Building a prompt for the wrong problem because the user said what they want, not what they need |
 | **G1: Domain Search** | Searches the web for domain knowledge, best practices, known pitfalls | Missing critical context that the AI would otherwise hallucinate |
 | **G2: Anti-Ambiguity Lock** | 18-item checklist scan, item by item; no empty "pass" | Vague terms like "appropriate," "good," "reasonable" that AI exploits |
 | **G3: Structured Draft** | Mandatory sections, precise constraints, zero free-form fields | Free-form prompts that give AI too much creative freedom |
@@ -102,6 +102,24 @@ Super-Prompt auto-detects project complexity and adjusts output depth:
 | **Heavy-Duty** | Multi-agent systems, SOPs, complex workflows |
 
 Input mode and output complexity are **orthogonal** — you can have Standard input + Heavy output.
+
+### v2.0: Four-Layer Funnel for Product Understanding
+
+G0 received a major upgrade in v2.0. For non-technical users who describe their product needs in plain language, Super-Prompt now uses a **four-layer requirements mining funnel** that fuses five industry methodologies:
+
+| Layer | Method | What It Does | Industry Foundation |
+|-------|--------|-------------|---------------------|
+| **1. Problem Discovery** | STAR Model | Asks "what problem did you encounter?" not "what do you want?" | Customer Discovery (Steve Blank) |
+| **2. Assumption Deconstruction** | 5 Whys | Every user statement is a hypothesis, not a fact. "I want X" → "Why?" → dig to root need | 5 Whys (Toyota), Socratic Questioning |
+| **3. Body Mining** | Pointer Analysis | External pointers (URLs/screenshots/reference apps) → open and analyze; internal pointers (vague words) → expand via questioning | Needfinding (Stanford d.school) |
+| **4. Gap Discovery** | Hypothesis Map | Verified vs Assumed vs Inherited → cross-reference → gap questions | Socratic Questioning, Funnel Questioning |
+
+**Core premise**: Users don't say what they need — they say what they think the solution is. Every word is a pointer, not the requirement body. Super-Prompt deconstructs these pointers to uncover the real requirements.
+
+**Validated results**: 
+- Chinese calendar widget case: coverage improved from 15% → 100% (16/16 requirements found)
+- Pomodoro timer case: 3/8 → 8/8 requirements found
+- Knowledge management system case: 3/14 → 14/14 requirements found
 
 ## Features
 

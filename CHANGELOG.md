@@ -1,5 +1,30 @@
 # Changelog
 
+## v2.0 (2026-07-24)
+
+### G0: Four-Layer Requirements Mining Funnel
+
+**Major upgrade to Step 0 (Product Understanding).** Changed from simple "three pointers" approach to a four-layer funnel backed by five industry methodologies:
+
+- **Layer 1: Problem Discovery** — STAR model (Situation/Task/Action/Result). Asks "what problem did you encounter?" instead of "what do you want?" Based on Customer Discovery (Steve Blank).
+- **Layer 2: Assumption Deconstruction** — Every user statement is a hypothesis, not a fact. "I want X" → "Why?" → 5 Whys to root need. Based on 5 Whys (Toyota) and Socratic Questioning.
+- **Layer 3: Body Mining** — External pointers (URLs/screenshots) → open and analyze; internal pointers (vague words) → expand via questioning. Based on Needfinding (Stanford d.school).
+- **Layer 4: Gap Discovery** — Hypothesis map: Verified vs Assumed vs Inherited. Cross-reference, gap questions, benchmark comparison. Based on Socratic Questioning and Funnel Questioning.
+
+**Core premise**: Users don't say what they need — they say what they think the solution is. Every word is a pointer, not the requirement body.
+
+**Validated results**:
+- Chinese calendar widget: 15% → 100% coverage (16/16 requirements)
+- Pomodoro timer: 37.5% → 100% coverage (8/8 requirements)
+- Knowledge management system: 21% → 100% coverage (14/14 requirements)
+
+### Documentation
+- README.md: Added v2.0 four-layer funnel section with methodology table and validated results
+- SKILL_zh.md: Step 0 fully rewritten with four-layer framework
+- SKILL.md (English): unchanged per user request
+
+---
+
 ## v1.0 (2026-07-23)
 
 ### Initial Release
